@@ -14,6 +14,7 @@ const Login = () => {
   });
 
   const handleChanges = event => {
+    console.log(user);
     setUser({
       ...user,
       [event.target.name]:event.target.value
@@ -22,27 +23,24 @@ const Login = () => {
 
   const handleSubmit = event =>{
     event.preventDefault();
-  }
-
-  
-  axios
-    .post('http://localhost:4000/api/', user)
+    axios
+    .post('http://localhost:5000/api/login', user)
     .then(res =>{
       console.log(res.data.payload);
       localStorage.setItem('token', res.data.payload);
       push('/private-route');
     })
     .catch(err =>{
-      console.log(err.response);
+      console.log(err);
     })
+  }
 
   const error = "Username or Password not valid";
 
   return (
-    <div onSubmit={handleSubmit}>
+    <div>
       <h1>Welcome to the Bubble App!</h1>
-      <form data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+      <form onSubmit={handleSubmit} data-testid="loginForm" className="login-form">
         <input
           name="username"
           type="text"
