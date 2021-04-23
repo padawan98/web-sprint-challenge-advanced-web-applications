@@ -21,8 +21,12 @@ const ColorList = ({ colors, updateColors }) => {
     e.preventDefault();
     axiosWithAuth().put(`/colors/${colorToEdit.id}`, colorToEdit)
     .then(res => {
-      console.log(res.data)
-      updateColors(res.data)
+      console.log(res.data);
+        axiosWithAuth().get('/colors')
+        .then(response => {
+          console.log(response.data);
+          updateColors(response.data);
+        })
     })
     .catch(err => {
       console.log(err.response)
