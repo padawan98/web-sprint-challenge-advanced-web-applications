@@ -1,25 +1,67 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import {useHistory} from 'react-router-dom';
+import axios from "axios";
 
+const initialState = {
+  username:"",
+  password:""
+}
 const Login = () => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
-
+  const [user, setUser] = useState(initialState);
+  const {push} = useHistory();
   useEffect(()=>{
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route
+    //bubbleroute
   });
+
+  const handleChanges = event => {
+    setUser({
+      ...user,
+      [event.target.name]:event.target.value
+    })
+  }
+
+  const handleSubmit = event =>{
+    event.preventDefault();
+  }
+
   
-  const error = "";
-  //replace with error state
+  axios
+    .post('http://localhost:4000/api/', user)
+    .then(res =>{
+      console.log(res.data.payload);
+      localStorage.setItem('token', res.data.payload);
+      push('/private-route');
+    })
+    .catch(err =>{
+      console.log(err.response);
+    })
+
+  const error = "Username or Password not valid";
 
   return (
-    <div>
+    <div onSubmit={handleSubmit}>
       <h1>Welcome to the Bubble App!</h1>
-      <div data-testid="loginForm" className="login-form">
+      <form data-testid="loginForm" className="login-form">
         <h2>Build login form here</h2>
-      </div>
-
-      <p data-testid="errorMessage" className="error">{error}</p>
+        <input
+          name="username"
+          type="text"
+          placeholder="username"
+          data-testid="username"
+          onChange={handleChanges}
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="password"
+          data-testid="password"
+          onChange={handleChanges}
+        />
+        <button>Login</button>
+      </form>
+      {/* if username or password string empty error message */}
+      {(user.username ==="" || user.password ==="") && 
+      <p data-testid="errorMessage" className="error">{error}</p>}
     </div>
   );
 };
