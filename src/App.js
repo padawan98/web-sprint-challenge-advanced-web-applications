@@ -18,13 +18,13 @@ function App() {
 
         <Route exact path="/" component={Login} />
         
-        <Route path='/private-route'>
-          <PrivateRoute/>
-        </Route>
-
-        <Route path='bubble-page'>
+        <PrivateRoute path='/private-route'>
           <BubblePage/>
-        </Route>
+        </PrivateRoute>
+
+        {/* <Route path='/bubble-page'>
+          <BubblePage/>
+        </Route> */}
 
       </div>
     </Router>

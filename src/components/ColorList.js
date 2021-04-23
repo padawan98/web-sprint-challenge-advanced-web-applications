@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {axiosWithAuth} from '../helpers/axiosWithAuth';
-
+import axiosWithAuth from '../helpers/axiosWithAuth';
+import Color from './Color';
 import EditMenu from './EditMenu';
 const initialColor = {
   color: "",
@@ -22,11 +22,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth().put(`/colors/${colorToEdit.id}`, colorToEdit)
     .then(res => {
       console.log(res.data)
-        axiosWithAuth().get('/colors')
-        .then(response => {
-          // console.log(response.data)
-          updateColors(response.data)
-        })
+      updateColors(res.data)
     })
     .catch(err => {
       console.log(err.response)
@@ -34,7 +30,7 @@ const ColorList = ({ colors, updateColors }) => {
   };
 
 
-  // console.log(`colors`, colors);
+  console.log(`colors`, colors);
 
   const deleteColor = color => {
     axiosWithAuth().delete(`/colors/${color.id}`)
@@ -52,33 +48,15 @@ const ColorList = ({ colors, updateColors }) => {
     <div className="colors-wrap">
       <p>colors</p>
       <ul>
-        {colors.map(color => (
-          <li key={color.color} onClick={() => editColor(color)}>
-            <span>
-              <span 
-                data-testid='color-test'
-                className="delete" 
-                onClick={e => {
-                    e.stopPropagation();
-                    deleteColor(color)
-                  }
-                }
-              >
-                  x
-              </span>{" "}
-              {color.color}
-            </span>
-            <div
-              className="color-box"
-              style={{ backgroundColor: color.code.hex }}
-            />
-          </li>
-        ))}
+        {colors.map(color => <Color key={color.id} editing={editing} color={color} editColor={editColor} deleteColor={deleteColor}/>)}
       </ul>
+      
       { editing && <EditMenu colorToEdit={colorToEdit} saveEdit={saveEdit} setColorToEdit={setColorToEdit} setEditing={setEditing}/> }
+
     </div>
   );
 };
+
 export default ColorList;
 
 //Task List:
